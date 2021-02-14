@@ -9,8 +9,7 @@ import pyaudio
 from time import sleep
 
 
-# CHANGE THIS PARAMETER FOR THE PROGRAM TO WORK
-directory_to_project = "C:\\Users\\harle\\PycharmProjects\\QMINDv4"
+directory_to_project = dir_path = os.path.dirname(os.path.realpath(__file__))  # "C:\\Users\\harle\\PycharmProjects\\QMINDv4"
 
 # What do you want the program to do?
 record_new_data = False  # Records all data from your microphone
