@@ -7,14 +7,15 @@ import shutil
 from playsound import playsound
 import pyaudio
 from time import sleep
+import shutil
 
 
 directory_to_project = dir_path = os.path.dirname(os.path.realpath(__file__))  # "C:\\Users\\harle\\PycharmProjects\\QMINDv4"
 
 # What do you want the program to do?
-record_new_data = False  # Records all data from your microphone
-break_up_audio = False  # Breaks up the recorded data to separate audio files
-play_recordings = True  # Plays you broken up audio files!
+# record_new_data = False  # Records all data from your microphone
+# break_up_audio = False  # Breaks up the recorded data to separate audio files
+# play_recordings = True  # Plays you broken up audio files!
 
 
 def clear_audio(path):  # Helper Function to Empty Directory of Useless Files
@@ -80,7 +81,8 @@ sound_file_name = "RecordedData.wav"
 # These are the words used. If you want to add/delete them MAKE sure to add/delete the directory before
 directories = ["the", "of", "and", "to", "be"]
 
-if record_new_data:
+
+def record_new_data():
     print("Get ready to record audio input")
     print("Wait ~0.5 seconds between each utterance of the word")
     print("You have 8 seconds for each, stay silent after you are done saying 5 utterances")
@@ -88,9 +90,10 @@ if record_new_data:
     for directory in directories:
         create_recorded_data(directory, sound_file_name, 8)
 
-if break_up_audio:  # Break up the audio into separate word files
+
+def break_up_audio(dir=dir_path):  # Break up the audio into separate word files
     for directory in directories:
-        sound_file = AudioSegment.from_wav(f"{directory_to_project}\\collectedRecordings\\rawRecordings\\{directory}_RecordedData.wav")
+        sound_file = AudioSegment.from_wav(f"collectedRecordings\\rawRecordings\\{directory}_RecordedData.wav")
         # min_silence_len=time in milliseconds, silence_thresh=what the comp classifies as silence in dB
         audio_chunks = split_on_silence(sound_file, min_silence_len=400, silence_thresh=(int(sound_file.dBFS) - 10))
 
@@ -115,7 +118,7 @@ if break_up_audio:  # Break up the audio into separate word files
             text = r.recognize_google(audio_data)
             print(text)
 
-if play_recordings:  # A test feature to test segments
+def play_recordings():  # A test feature to test segments
     for directory in directories:
         numFiles = os.listdir(f"collectedRecordings\\{directory}")
         print(f"Words in \"{directory}\" directory")
@@ -124,3 +127,28 @@ if play_recordings:  # A test feature to test segments
                 f"collectedRecordings\\{directory}\\{1+segment}.wav")
             playsound(f"collectedRecordings\\{directory}\\{1+segment}.wav")
             playsound(f"soundEffects\\Beep.wav")
+
+
+def export_recordings(name="foo"):
+    """copy files from collected recordings to /words/'word'/foo/
+    """
+    for directory in directories:
+        numFiles = os.listdir(f"collectedRecordings\\{directory}")
+        for file in range(1,len(numFiles)+1):
+            src = f"collectedRecordings\\{directory}\\{file}.wav"
+            dst = f"words\\{directory}\\{name}\\{file}.wav"
+            shutil.copy(src,dst)
+            print(f"copied {src} to {dst}")
+
+
+def record_and_save(name):
+    """ records and exports files for all words
+    input:
+        name: string of your name
+    """
+    record_new_data()
+    break_up_audio()
+    # play_recordings()
+    export_recordings(name)
+
+

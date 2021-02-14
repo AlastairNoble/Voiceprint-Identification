@@ -1,4 +1,6 @@
 from tools.data_manager import *
+from tools.dataCreation import *
+from tools.wordSeparation import *
 
 
 def create_model(n_features, n_classes):
@@ -62,10 +64,16 @@ class word_model:
         history = self.model.fit(train_features, self.train_labels_encoded, epochs=20, validation_data=(val_features, val_labels))
 
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+
 if __name__ == "__main__":
-    words = ["the", "be", "to", "of", "and"]
+    # words = ["the", "be", "to", "of", "and"]
 
-    alexa_model = word_model("alexa")
+    # alexa_model = word_model("alexa")
 
-    print(predict_speaker("test/alex.wav", alexa_model))
+    # print(predict_speaker("test/alex.wav", alexa_model))
 
+    # separate_words(f"{dir_path}\\test\\Sentence.wav")
+
+    record_and_save("alastair")
