@@ -7,7 +7,6 @@ import shutil
 from playsound import playsound
 import pyaudio
 from time import sleep
-import shutil
 
 
 directory_to_project = dir_path = os.path.dirname(os.path.realpath(__file__))  # "C:\\Users\\harle\\PycharmProjects\\QMINDv4"

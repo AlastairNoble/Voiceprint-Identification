@@ -77,6 +77,13 @@ def get_features(filepaths, ss):
 
 
 def get_encoded_labels(speaker_names):
+    """
+    one hot encode labels
+    :param speaker_names: list
+        list of strings of labels/speakers
+    :return: list
+        list of one hot encoded labels
+    """
     speaker_names.tolist()
     lb = LabelEncoder()
     return to_categorical(lb.fit_transform(speaker_names))
@@ -84,6 +91,13 @@ def get_encoded_labels(speaker_names):
 
 def predict_speaker(file_path, word_model):
     """
+    predict the labels of the speaker from a .wav file
+    :param file_path: str
+        file path for the .wav file to predict the speaker of
+    :param word_model:
+        trained model to make the prediction from
+    :return: str
+        predicted speaker/label
     """
     labels = word_model.train_labels_encoded.tolist()  # list of the encoded labels from training
     features = word_model.ss.transform([extract_features(file_path)])
@@ -102,12 +116,18 @@ def predict_speaker(file_path, word_model):
         prediction = "could not identify speaker"
     return prediction
 
+CHUNK = 1024
+FORMAT = pyaudio.paInt16
+CHANNELS = 2
+RATE = 44100
 
 def get_audio_input():
-    CHUNK = 1024
-    FORMAT = pyaudio.paInt16
-    CHANNELS = 2
-    RATE = 44100
+    """
+    get live audio input for 1 second and save it as a .wav file
+    :return: str
+        name of the .wav file where the audio is saved
+    """
+
     RECORD_SECONDS = 1
     WAVE_OUTPUT_FILENAME = "test/test_output.wav"
 
@@ -145,3 +165,37 @@ def get_audio_input():
     wf.writeframes(b''.join(frames))
     wf.close()
     return WAVE_OUTPUT_FILENAME
+
+
+def get_audio_out_as_in():
+    RECORD_SECONDS = 5
+    WAVE_OUTPUT_FILENAME = "test/test_out_from_in.wav"
+    p = pyaudio.PyAudio()
+    stream = p.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=48000,
+                    input=True,
+                    input_device_index=11,
+                    frames_per_buffer=CHUNK)
+    # for i in range(p.get_device_count()):
+    #     print(p.get_device_info_by_index(i)
+    print("* recording")
+
+    frames = []
+
+    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+        data = stream.read(CHUNK)
+        frames.append(data)
+
+    print("* done recording")
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+    wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(p.get_sample_size(FORMAT))
+    wf.setframerate(RATE)
+    wf.writeframes(b''.join(frames))
+    wf.close()
