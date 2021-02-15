@@ -13,9 +13,18 @@ from keras.utils.np_utils import to_categorical
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 
-N_MFCCS = 12
+N_MFCCS = 12  # number of MFCCs to use in feature extraction
 
-def get_data_from_dir(dir, n_classes=10):
+def get_data_from_dir(dir):
+    """
+    returns filenames corresponding to speakers. Assumes files are organized as follows /speaker/example.wav
+    :param dir: str
+        current working directory
+    :param n_classes: int
+        number of classes/
+    :return: pandas dataframe
+        dataframe with columns 'filepath' and 'speaker' where 'filepath' references a .wav file
+    """
     speakers = os.listdir(dir)
     speakers = speakers[:10]
 
@@ -29,6 +38,15 @@ def get_data_from_dir(dir, n_classes=10):
 
 
 def extract_features(filename, n_mfccs=N_MFCCS):
+    """
+    Extract MFCCs and other features from .wav file
+    :param filename: str
+        wav file to extract features from
+    :param n_mfccs: int
+        number of mfccs to extract
+    :return: list
+        list of extracted features
+    """
     X, sample_rate = librosa.load(filename, res_type='kaiser_fast')
 
     mfccs = librosa.feature.mfcc(y=X, sr=sample_rate, n_mfcc=n_mfccs)
@@ -44,7 +62,14 @@ def extract_features(filename, n_mfccs=N_MFCCS):
 
 
 def get_features(filepaths, ss):
-
+    """
+    extract and scale features for all files
+    :param filepaths:
+        list of filepaths of .wav files to get features from
+    :param ss: standardScalar()
+        used to fit and transform data (remove the mean from the data and scale it to unit variance)
+    :return:
+    """
     features = filepaths.apply(extract_features)
     features = features.tolist()
     features_scaled = ss.fit_transform(features)
@@ -58,7 +83,8 @@ def get_encoded_labels(speaker_names):
 
 
 def predict_speaker(file_path, word_model):
-
+    """
+    """
     labels = word_model.train_labels_encoded.tolist()  # list of the encoded labels from training
     features = word_model.ss.transform([extract_features(file_path)])
 

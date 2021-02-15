@@ -4,6 +4,14 @@ from tools.wordSeparation import *
 
 
 def create_model(n_features, n_classes):
+    """
+    :param n_features: int
+        number of features in the data
+    :param n_classes:
+        number of classes/speakers/labels
+    :return:
+        keras model
+    """
     model = Sequential()
 
     model.add(Dense(n_features, input_shape=(n_features,), activation='relu'))
@@ -25,29 +33,29 @@ def create_model(n_features, n_classes):
     return model
 
 
-def train_model(word):
-    data = get_data_from_dir('{word}/')
-    train, val = train_test_split(data, test_size=0.29, stratify=data['speaker'])
-    ss = StandardScaler()
-    train_features = get_features(train['filepath'], ss)
-    val_features = get_features(val['filepath'], ss)
-
-    train_labels = get_encoded_labels(train['speaker'])
-    val_labels = get_encoded_labels(val['speaker'])
-
-    model = create_model(3 * N_MFCCS, len(train_labels[0]))
-
-    history = model.fit(train_features, train_labels, epochs=20, validation_data=(val_features, val_labels))
-
-    return model, train_labels
-    # print(predict_speaker("test/alex.wav", model, train['speaker'].tolist(), train_labels, ss))
-    # print(predict_speaker(audio_input, model, train['speaker'].tolist(), train_labels, ss))
-    # audio_input = get_audio_input()
-
-
 class word_model:
-    def __init__(self, word):
-        data = get_data_from_dir('words/{}/'.format(word))
+    """
+    A class to represent a model for multiple words
+    Attributes:
+        train_labels: list
+            list of labels (speakers) in the training set
+        train_labels_encoded: list
+            list of one hot encoded labels
+        model: keras model
+            model fit to the training data
+
+    """
+    def __init__(self, words):
+        """
+        constructs one keras model for many words using data found in directory words/'word'/ for each 'word'
+        :param words: list of str
+            list of words to use for training, ASSUMES data for each word exists in words/'word'
+        """
+        data = pd.DataFrame()
+        for word in words:
+            word_data = get_data_from_dir('words/{}/'.format(word))
+            data = data.append(word_data)
+        print(data)
         train, val = train_test_split(data, test_size=0.29, stratify=data['speaker'])
         self.ss = StandardScaler()
 
@@ -68,12 +76,15 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 if __name__ == "__main__":
-    # words = ["the", "be", "to", "of", "and"]
+    words = ["alexa","the", "be", "to", "of", "and"]
 
-    # alexa_model = word_model("alexa")
+    model = word_model(words)
 
-    # print(predict_speaker("test/alex.wav", alexa_model))
+    print(predict_speaker("test/eli.wav", model))
+    print(predict_speaker("test/harley.wav", model))
+    print(predict_speaker("test/alex.wav", model))
 
+    print(predict_speaker(get_audio_input(),model))
     # separate_words(f"{dir_path}\\test\\Sentence.wav")
 
     record_and_save("alastair")
