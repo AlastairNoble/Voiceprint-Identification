@@ -76,15 +76,17 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 if __name__ == "__main__":
-    words = ["alexa","the", "be", "to", "of", "and"]
+    get_audio_out_as_in()
 
-    model = word_model(words)
-
-    print(predict_speaker("test/eli.wav", model))
-    print(predict_speaker("test/harley.wav", model))
-    print(predict_speaker("test/alex.wav", model))
-
-    print(predict_speaker(get_audio_input(),model))
+    # words = ["alexa","the", "be", "to", "of", "and"]
+    #
+    # model = word_model(words)
+    #
+    # print(predict_speaker("test/eli.wav", model))
+    # print(predict_speaker("test/harley.wav", model))
+    # print(predict_speaker("test/alex.wav", model))
+    #
+    # print(predict_speaker(get_audio_input(),model))
     # separate_words(f"{dir_path}\\test\\Sentence.wav")
 
-    record_and_save("alastair")
+    # record_and_save("alastair")

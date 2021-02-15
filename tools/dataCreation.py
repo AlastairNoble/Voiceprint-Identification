@@ -9,8 +9,13 @@ from time import sleep
 import shutil
 from tools.wordSeparation import clear_audio
 
-directory_to_project = dir_path = os.path.dirname(os.path.realpath(__file__))
 
+directory_to_project = dir_path = os.path.dirname(os.path.realpath(__file__))  # "C:\\Users\\harle\\PycharmProjects\\QMINDv4"
+
+# What do you want the program to do?
+# record_new_data = False  # Records all data from your microphone
+# break_up_audio = False  # Breaks up the recorded data to separate audio files
+# play_recordings = True  # Plays you broken up audio files!
 
 def create_recorded_data(directory, seconds):
     """
