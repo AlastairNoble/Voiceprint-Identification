@@ -55,7 +55,7 @@ class word_model:
         for word in words:
             word_data = get_data_from_dir('words/{}/'.format(word))
             data = data.append(word_data)
-        print(data)
+
         train, val = train_test_split(data, test_size=0.29, stratify=data['speaker'])
         self.ss = StandardScaler()
 
@@ -69,24 +69,24 @@ class word_model:
 
         self.model = create_model(3 * N_MFCCS, len(self.train_labels_encoded[0]))
 
-        history = self.model.fit(train_features, self.train_labels_encoded, epochs=20, validation_data=(val_features, val_labels))
+        history = self.model.fit(train_features, self.train_labels_encoded, epochs=250, validation_data=(val_features, val_labels))
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 if __name__ == "__main__":
-    get_audio_out_as_in()
 
-    # words = ["alexa","the", "be", "to", "of", "and"]
-    #
-    # model = word_model(words)
-    #
-    # print(predict_speaker("test/eli.wav", model))
-    # print(predict_speaker("test/harley.wav", model))
-    # print(predict_speaker("test/alex.wav", model))
-    #
-    # print(predict_speaker(get_audio_input(),model))
+    words = ["alexa","the", "be", "to", "of", "and"]
+
+    model = word_model(words)
+
+    print(predict_speaker("test/eli.wav", model))
+    print(predict_speaker("test/harley.wav", model))
+    print(predict_speaker("test/alex.wav", model))
+
+    live_input(model)
+
     # separate_words(f"{dir_path}\\test\\Sentence.wav")
 
-    # record_and_save("alastair")
+    # record_and_save("harley")

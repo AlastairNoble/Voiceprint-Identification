@@ -35,7 +35,9 @@ def separate_words(sound_file_name):
         sound_file_name: str
             Name of the audio file
 
-    Returns: NULL
+    Returns:
+        out_files: list
+             list of files created (str)
 
     """
     sound_file = AudioSegment.from_wav(sound_file_name)
@@ -44,14 +46,18 @@ def separate_words(sound_file_name):
 
     clear_audio("./splitAudio")
     numWords = 0
+    out_files = []
     for i, chunk in enumerate(audio_chunks):
         out_file = f"./splitAudio//chunk{i}.wav"
+        out_files.append(out_file)
         # print("Exporting", out_file) # Check to see exporting
         chunk.export(out_file, format="wav")
         numWords += 1
-    print(f"Exported {numWords} .wav files")
+    # print(f"Exported {numWords} .wav files")
     # CONVERT AUDIO TO TEXT -------------
     # initialize the recognizer
+
+    """
     r = sr.Recognizer()
 
     # open the file
@@ -61,7 +67,9 @@ def separate_words(sound_file_name):
         # recognize (convert from speech to text)
         text = r.recognize_google(audio_data)
         print(text)
+    """
+    # print("Start")
+    # playsound(sound_file_name)
+    # print("End")
 
-    print("Start")
-    playsound(sound_file_name)
-    print("End")
+    return out_files

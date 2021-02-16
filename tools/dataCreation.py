@@ -25,8 +25,6 @@ def create_recorded_data(directory, seconds):
             The word that the person is saying multiple times
         seconds: int
             Amount of time given to record. (Usually 7-8 seconds)
-
-    Returns: NULL
     """
     chunk = 1024  # Record in chunks of 1024 samples
     sample_format = pyaudio.paInt16  # 16 bits per sample
@@ -94,7 +92,6 @@ def record_new_data():
 def break_up_audio():  # Break up the audio into separate word files
     """
     Breaks up the audio into separate word files to process and prints out a guess as to what the audio file says
-    Returns: NULL
     """
     for directory in directories:
         sound_file = AudioSegment.from_wav(f"collectedRecordings\\rawRecordings\\{directory}_RecordedData.wav")
@@ -119,7 +116,6 @@ def audio_to_text(audio_dir):
     Args:
         dir: str
             Path to where the audio file is
-    Returns: NULL
     """
     # initialize the recognizer
     r = sr.Recognizer()
@@ -136,7 +132,6 @@ def audio_to_text(audio_dir):
 def play_recordings():
     """
     Plays all of the recordings back to user to ensure that they were recorded correctly (A test feature)
-    Returns: NULL
     """
     for directory in directories:
         numFiles = os.listdir(f"collectedRecordings\\{directory}")

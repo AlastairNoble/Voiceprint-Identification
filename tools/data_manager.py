@@ -12,7 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 from keras.utils.np_utils import to_categorical
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
-
+from tools.wordSeparation import *
 N_MFCCS = 12  # number of MFCCs to use in feature extraction
 
 def get_data_from_dir(dir):
@@ -121,13 +121,12 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
 
-def get_audio_input():
+def get_mic_input():
     """
     get live audio input for 1 second and save it as a .wav file
     :return: str
         name of the .wav file where the audio is saved
     """
-
     RECORD_SECONDS = 1
     WAVE_OUTPUT_FILENAME = "test/test_output.wav"
 
@@ -167,27 +166,32 @@ def get_audio_input():
     return WAVE_OUTPUT_FILENAME
 
 
-def get_audio_out_as_in():
-    RECORD_SECONDS = 5
+def get_meeting_input(secs = 5):
+
     WAVE_OUTPUT_FILENAME = "test/test_out_from_in.wav"
     p = pyaudio.PyAudio()
+
+    for i in range(p.get_device_count()):
+        dev = p.get_device_info_by_index(i)
+        if (dev['name'] == 'Stereo Mix (Realtek(R) Audio)' and dev['hostApi'] == 0):
+            dev_index = dev['index']
+
     stream = p.open(format=FORMAT,
                     channels=CHANNELS,
                     rate=48000,
                     input=True,
-                    input_device_index=11,
+                    input_device_index=dev_index,
                     frames_per_buffer=CHUNK)
-    # for i in range(p.get_device_count()):
-    #     print(p.get_device_info_by_index(i)
-    print("* recording")
+
+    # print("* recording")
 
     frames = []
 
-    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+    for i in range(0, int(RATE / CHUNK * secs)):
         data = stream.read(CHUNK)
         frames.append(data)
 
-    print("* done recording")
+    # print("* done recording")
 
     stream.stop_stream()
     stream.close()
@@ -199,3 +203,19 @@ def get_audio_out_as_in():
     wf.setframerate(RATE)
     wf.writeframes(b''.join(frames))
     wf.close()
+    return WAVE_OUTPUT_FILENAME
+
+
+def live_input(model):
+    while True:
+        one_second_input = get_meeting_input(2)
+        chunks = separate_words(one_second_input)
+
+        for chunk in chunks:
+            try:
+                print(predict_speaker(chunk, model))
+            except:
+                pass
+
+
+        print()
