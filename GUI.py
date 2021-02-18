@@ -116,8 +116,8 @@ def record_sentence_UI(name, frame, user_input):
 
 def train_model_UI(acc_label):
     model = word_model(['sentence'])
-
-    acc_label.config(text=f"Accuracy={3} Val Accuracy={3}")
+    accuracy = model.accuracy[-1]
+    acc_label.config(text=f"Accuracy={accuracy}")
 
 
 
@@ -165,7 +165,7 @@ class HomePage:
         TrainModelButton = Button(optionsframe, text="Train Model", command=lambda: train_model_UI(model_accuracy_label), height=2, width=13, font="Helvetica 15 bold")
         TrainModelButton.place(x=315, y=5)
 
-        model_accuracy_label = Label(frame1, text=f"Accuracy=N/A Val Accuracy=N/A", anchor=CENTER, font="Helvetica 16 bold", height=2)
+        model_accuracy_label = Label(frame1, text=f"Accuracy= N/A", anchor=CENTER, font="Helvetica 16 bold", height=2)
         model_accuracy_label.place(x=50, y=400)
 
         # Record new data
