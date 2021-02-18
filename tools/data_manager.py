@@ -206,16 +206,42 @@ def get_meeting_input(secs = 5):
     return WAVE_OUTPUT_FILENAME
 
 
+def most_frequent(List):
+    """
+    :param List: list
+    :returns most frequently occuring element in a list
+    """
+    if len(List) > 0:
+        return max(set(List), key=List.count)
+    return ''
+
+
+def short_prediction(model, s=2):
+    """
+    record computer input for s seconds, then break it into chunks, then predict the speaker of each chunk, then return the best prediction
+    :param model: keras model
+    :param s: int
+        seconds to record
+    :return: string
+        prediction of speaker in segment
+    """
+    one_second_input = get_meeting_input(s)
+    chunks = separate_words(one_second_input)
+
+    for chunk in chunks:
+        predictions = []
+        try:
+            pred = predict_speaker(chunk, model)
+            predictions.append(pred)
+        except:
+            pass
+    return most_frequent(predictions)
+
+
 def live_input(model):
+    """
+    make short term predictions until interrupted.
+    :param model: keras model
+    """
     while True:
-        one_second_input = get_meeting_input(2)
-        chunks = separate_words(one_second_input)
-
-        for chunk in chunks:
-            try:
-                print(predict_speaker(chunk, model))
-            except:
-                pass
-
-
-        print()
+        print(short_prediction(model, 1))

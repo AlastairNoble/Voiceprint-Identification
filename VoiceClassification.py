@@ -56,7 +56,7 @@ class word_model:
             word_data = get_data_from_dir('words/{}/'.format(word))
             data = data.append(word_data)
 
-        train, val = train_test_split(data, test_size=0.29, stratify=data['speaker'])
+        train, val = train_test_split(data, test_size=0.1, stratify=data['speaker'])
         self.ss = StandardScaler()
 
         train_features = get_features(train['filepath'], self.ss)
@@ -77,7 +77,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
 
-   #  record_sentence("harley")
+    #  record_sentence("harley")
     # play_recordings(['sentence'])
     # words = ["alexa","the", "be", "to", "of", "and"]
     #
