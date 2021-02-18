@@ -17,6 +17,7 @@ directory_to_project = dir_path = os.path.dirname(os.path.realpath(__file__))  #
 # break_up_audio = False  # Breaks up the recorded data to separate audio files
 # play_recordings = True  # Plays you broken up audio files!
 
+
 def create_recorded_data(directory, seconds):
     """
     Helper function to record audio (Actually records it and places into collected recordings)
