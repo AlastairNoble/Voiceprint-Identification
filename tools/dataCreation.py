@@ -34,12 +34,6 @@ def create_recorded_data(directory, seconds):
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
     # print("Say \"" + directory + "\" 5 times in 3")
-    print("recording in 3")
-    sleep(1)
-    print("2")
-    sleep(1)
-    print("1")
-    sleep(1)
     print('Recording')
 
     stream = p.open(format=sample_format,
@@ -96,12 +90,19 @@ def record_sentence(name, s=10):
     sleep(2)
     print('"That quick beige fox jumped in the air over each thin dog. Look out, I shout, for he\'s foiled you again, creating chaos"\n')
     sleep(1)
+    print("recording in 3")
+    sleep(1)
+    print("2")
+    sleep(1)
+    print("1")
+    sleep(1)
 
     create_recorded_data("sentence", s)
 
     break_up_audio(["sentence"])
 
     export_recordings(name, ["sentence"])
+
 
 def break_up_audio(dirs= directories):  # Break up the audio into separate word files
     """
