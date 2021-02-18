@@ -31,10 +31,10 @@ def create_recorded_data(directory, seconds):
     channels = 2
     fs = 44100  # Record at 44100 samples per second
     filename = f"collectedRecordings\\rawRecordings\\{directory}_RecordedData.wav"
-    print(filename)
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
-    print("Say \"" + directory + "\" 5 times in 3")
+    # print("Say \"" + directory + "\" 5 times in 3")
+    print("recording in 3")
     sleep(1)
     print("2")
     sleep(1)
@@ -89,14 +89,28 @@ def record_new_data():
         create_recorded_data(directory, 8)
 
 
-def break_up_audio():  # Break up the audio into separate word files
+def record_sentence(name, s=10):
+    print("\nGet ready to record audio input \n")
+    sleep(2)
+    print(f"you will have {s} seconds to read the following sentence \n")
+    sleep(2)
+    print('"That quick beige fox jumped in the air over each thin dog. Look out, I shout, for he\'s foiled you again, creating chaos"\n')
+    sleep(1)
+
+    create_recorded_data("sentence", s)
+
+    break_up_audio(["sentence"])
+
+    export_recordings(name, ["sentence"])
+
+def break_up_audio(dirs= directories):  # Break up the audio into separate word files
     """
     Breaks up the audio into separate word files to process and prints out a guess as to what the audio file says
     """
-    for directory in directories:
+    for directory in dirs:
         sound_file = AudioSegment.from_wav(f"collectedRecordings\\rawRecordings\\{directory}_RecordedData.wav")
         # min_silence_len=time in milliseconds, silence_thresh=what the comp classifies as silence in dB
-        audio_chunks = split_on_silence(sound_file, min_silence_len=400, silence_thresh=(int(sound_file.dBFS) - 10))
+        audio_chunks = split_on_silence(sound_file, min_silence_len=100, silence_thresh=(int(sound_file.dBFS) - 10))
 
         clear_audio(f"collectedRecordings\\{directory}")
         numWords = 0
@@ -129,11 +143,11 @@ def audio_to_text(audio_dir):
         print(text)
 
 
-def play_recordings():
+def play_recordings(dirs= directories):
     """
     Plays all of the recordings back to user to ensure that they were recorded correctly (A test feature)
     """
-    for directory in directories:
+    for directory in dirs:
         numFiles = os.listdir(f"collectedRecordings\\{directory}")
         print(f"Words in \"{directory}\" directory")
         for segment in range(len(numFiles)):
@@ -143,17 +157,17 @@ def play_recordings():
             playsound(f"soundEffects\\Beep.wav")
 
 
-def export_recordings(name="foo"):
+def export_recordings(name, dirs=directories):
     """
     copy files from collected recordings to /words/'word'/foo/
     """
-    for directory in directories:
+    for directory in dirs:
         numFiles = os.listdir(f"collectedRecordings\\{directory}")
         for file in range(1,len(numFiles)+1):
             src = f"collectedRecordings\\{directory}\\{file}.wav"
             dst = f"words\\{directory}\\{name}\\{file}.wav"
             shutil.copy(src,dst)
-            print(f"copied {src} to {dst}")
+            # print(f"copied {src} to {dst}")
 
 
 def record_and_save(name):

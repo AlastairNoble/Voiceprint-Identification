@@ -69,7 +69,7 @@ class word_model:
 
         self.model = create_model(3 * N_MFCCS, len(self.train_labels_encoded[0]))
 
-        history = self.model.fit(train_features, self.train_labels_encoded, epochs=250, validation_data=(val_features, val_labels))
+        history = self.model.fit(train_features, self.train_labels_encoded, epochs=100, validation_data=(val_features, val_labels))
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -77,13 +77,15 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
 
-    words = ["alexa","the", "be", "to", "of", "and"]
-
-    model = word_model(words)
-
-    print(predict_speaker("test/eli.wav", model))
-    print(predict_speaker("test/harley.wav", model))
-    print(predict_speaker("test/alex.wav", model))
+   #  record_sentence("harley")
+    # play_recordings(['sentence'])
+    # words = ["alexa","the", "be", "to", "of", "and"]
+    #
+    model = word_model(['sentence'])
+    #
+    # print(predict_speaker("test/eli.wav", model))
+    # print(predict_speaker("test/harley.wav", model))
+    # print(predict_speaker("test/alex.wav", model))
 
     live_input(model)
 
