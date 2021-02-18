@@ -168,7 +168,9 @@ def export_recordings(name, dirs=directories):
         for file in range(1,len(numFiles)+1):
             src = f"collectedRecordings\\{directory}\\{file}.wav"
             dst = f"words\\{directory}\\{name}\\{file}.wav"
-            shutil.copy(src,dst)
+            if not os.path.isdir(f"words\\{directory}\\{name}"):
+                os.mkdir(f"words\\{directory}\\{name}")
+            shutil.copy(src, dst)
             # print(f"copied {src} to {dst}")
 
 
