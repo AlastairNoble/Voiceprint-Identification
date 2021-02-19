@@ -73,6 +73,7 @@ class word_model:
 
         self.accuracy = history.history['accuracy']
 
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -83,7 +84,6 @@ if __name__ == "__main__":
     # words = ["alexa","the", "be", "to", "of", "and"]
     #
     model = word_model(['sentence'])
-    print(model.accuracy)
     #
     # print(predict_speaker("test/eli.wav", model))
     # print(predict_speaker("test/harley.wav", model))
