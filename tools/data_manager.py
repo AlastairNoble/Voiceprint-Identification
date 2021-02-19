@@ -244,4 +244,4 @@ def live_input(model):
     :param model: keras model
     """
     while True:
-        print(short_prediction(model, 1))
+        print(short_prediction(model, 2))

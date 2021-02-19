@@ -117,9 +117,7 @@ def record_sentence_UI(name, frame, user_input):
 def train_model_UI(acc_label):
     model = word_model(['sentence'])
     accuracy = model.accuracy[-1]
-    acc_label.config(text=f"Accuracy={accuracy}")
-
-
+    acc_label.config(text=f"Accuracy={round(accuracy,3)}")
 
 class HomePage:
     def __init__(self, master):

@@ -69,7 +69,7 @@ class word_model:
 
         self.model = create_model(3 * N_MFCCS, len(self.train_labels_encoded[0]))
 
-        history = self.model.fit(train_features, self.train_labels_encoded, epochs=100, validation_data=(val_features, val_labels))
+        history = self.model.fit(train_features, self.train_labels_encoded, epochs=20, validation_data=(val_features, val_labels))
 
         self.accuracy = history.history['accuracy']
 
@@ -79,7 +79,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
 
-    #  record_sentence("harley")
     # play_recordings(['sentence'])
     # words = ["alexa","the", "be", "to", "of", "and"]
     #
