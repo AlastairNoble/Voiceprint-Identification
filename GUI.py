@@ -120,6 +120,27 @@ def train_model_UI(acc_label):
     acc_label.config(text=f"Accuracy={round(accuracy,3)}")
 
 class HomePage:
+    def record_live_setup_UI(self, recordButton, frame):
+        dir_record_img = directory_to_project + "\\tools\\images\\microphone.png"
+        # Photo for Record Button
+        photorecord = PhotoImage(file=dir_record_img)
+        photoimagerecord = photorecord.subsample(1000, 1000)
+        panelrecord = Label(frame, image=photoimagerecord)
+        panelrecord.photo = photoimagerecord
+        recordButton.config(image=photorecord)
+        recordButton.config(command=lambda: print("hi"))
+        # self.record_live_UI(self)
+
+    # def record_live_UI(self):
+    #     self.stopButton.after(1000)
+    #     # Change UI display. Delete microphone and add stop button
+    #
+    #     # Check stop button
+    #     print("hi")
+    #     # record for 2 sec
+    #     # process results
+    #     # highlight name
+
     def __init__(self, master):
         # Control the Menu Bar
         frame1 = Frame(master, height=455, width=500)
@@ -139,7 +160,7 @@ class HomePage:
 
         # Functionality of Record Live button
         RecordButton = Button(optionsframe, image=photoimagerecord, relief="flat", border=1, bd=0, highlightthickness=0,
-                         command=lambda: HighlightLabel("harley"))
+                         command=lambda: self.record_live_setup_UI(RecordButton, frame1))
         RecordButton.place(x=208, y=5)
 
         name_frame = Frame(master, height=400, width=250, borderwidth="4", relief="groove")
