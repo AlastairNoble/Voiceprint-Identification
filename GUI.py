@@ -173,8 +173,7 @@ class HomePage:
         # train model - print accuracy
 
 
-
-def main():
+def start_UI():
     global window, names, label_list, label_list_button
     names = os.listdir("words\\sentence")
     updateLabelList()
@@ -201,6 +200,8 @@ def main():
     window.mainloop()
 
 
+def main():
+    start_UI()
 
 
 main()
