@@ -116,12 +116,18 @@ def break_up_audio(dirs= directories):  # Break up the audio into separate word 
 
         clear_audio(f"collectedRecordings\\{directory}")
         numWords = 0
+        numDels = 0
         for i, chunk in enumerate(audio_chunks):
             out_file = f"collectedRecordings\\{directory}\\{i+1}.wav"
             # print("Exporting", out_file) # Check to see exporting
             chunk.export(out_file, format="wav")
+
+            audio_chunk = AudioSegment.from_wav(f"collectedRecordings\\{directory}\\{i+1}.wav")
+            if audio_chunk.dBFS < (sound_file.dBFS - 20):
+                os.remove(f"collectedRecordings\\{directory}\\{i+1}.wav")
+                numDels += 1
             numWords += 1
-        print(f"Exported {numWords} .wav files")
+        print(f"Exported {numWords} .wav files, {numDels} were deleted because they were too quiet")
 
         audio_to_text(f"collectedRecordings\\rawRecordings\\{directory}_RecordedData.wav")  # converts audio to text
 
