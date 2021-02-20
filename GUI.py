@@ -119,16 +119,21 @@ def train_model_UI(acc_label):
     accuracy = model.accuracy[-1]
     acc_label.config(text=f"Accuracy={round(accuracy,3)}")
 
+
 class HomePage:
     def record_live_setup_UI(self, recordButton, frame):
-        dir_record_img = directory_to_project + "\\tools\\images\\microphone.png"
+        recordButton.destroy()
+        dir_record_img = directory_to_project + "\\tools\\images\\stop-button.png"
         # Photo for Record Button
         photorecord = PhotoImage(file=dir_record_img)
-        photoimagerecord = photorecord.subsample(1000, 1000)
+        photoimagerecord = photorecord.subsample(16, 16)
         panelrecord = Label(frame, image=photoimagerecord)
         panelrecord.photo = photoimagerecord
-        recordButton.config(image=photorecord)
-        recordButton.config(command=lambda: print("hi"))
+
+        stopButton = Button(frame, image=photoimagerecord, relief="flat", border=1, bd=0, highlightthickness=0,
+                         command=lambda: print("hi"))
+        stopButton.place(x=208, y=5)
+
         # self.record_live_UI(self)
 
     # def record_live_UI(self):
@@ -140,6 +145,7 @@ class HomePage:
     #     # record for 2 sec
     #     # process results
     #     # highlight name
+
 
     def __init__(self, master):
         # Control the Menu Bar
@@ -160,7 +166,7 @@ class HomePage:
 
         # Functionality of Record Live button
         RecordButton = Button(optionsframe, image=photoimagerecord, relief="flat", border=1, bd=0, highlightthickness=0,
-                         command=lambda: self.record_live_setup_UI(RecordButton, frame1))
+                         command=lambda: self.record_live_setup_UI(RecordButton, optionsframe))
         RecordButton.place(x=208, y=5)
 
         name_frame = Frame(master, height=400, width=250, borderwidth="4", relief="groove")
