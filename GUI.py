@@ -10,6 +10,7 @@ model_accuracy = .575
 global names
 global label_list
 global label_list_button
+global model
 
 def ChangeScreen(screen, frame):
     for widget in frame.winfo_children():
@@ -115,6 +116,7 @@ def record_sentence_UI(name, frame, user_input):
 
 
 def train_model_UI(acc_label):
+    global model
     model = word_model(['sentence'])
     accuracy = model.accuracy[-1]
     acc_label.config(text=f"Accuracy={round(accuracy,3)}")
@@ -134,17 +136,20 @@ class HomePage:
                          command=lambda: print("hi"))
         stopButton.place(x=208, y=5)
 
-        # self.record_live_UI(self)
+        self.record_live_UI()
 
-    # def record_live_UI(self):
-    #     self.stopButton.after(1000)
-    #     # Change UI display. Delete microphone and add stop button
-    #
-    #     # Check stop button
-    #     print("hi")
-    #     # record for 2 sec
-    #     # process results
-    #     # highlight name
+    def record_live_UI(self):
+        global model
+        # self.record_live_UI().after(1000)
+        # Change UI display. Delete microphone and add stop button
+
+        # Check stop button
+        print("hi")
+        # record for 2 sec
+        guess = short_prediction(model, 2)
+        # process results
+        # highlight name
+        HighlightLabel(guess)
 
 
     def __init__(self, master):
@@ -202,7 +207,7 @@ def start_UI():
     global window, names, label_list, label_list_button
     names = os.listdir("words\\sentence")
     updateLabelList()
-    print(names, label_list, label_list_button)
+
     window = Tk()
 
     HomePage(window)
