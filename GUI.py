@@ -1,24 +1,26 @@
 from tkinter import *
-import numpy as np
-import os
-from tools.dataCreation import *
 from VoiceClassification import *
 pi = np.pi
 directory_to_project = dir_path = os.path.dirname(os.path.realpath(__file__))
 model_val_accuracy = 0.555
 model_accuracy = .575
-global names
-global label_list
-global label_list_button
-global model
 
-def ChangeScreen(screen, frame):
-    for widget in frame.winfo_children():
+global names, label_list, label_list_button, model
+
+
+def ChangeScreen():
+    """
+    Deletes UI and resets back to original frame (HomePage)
+    """
+    for widget in window.winfo_children():
         widget.destroy()
-    screen(window)
+    HomePage(window)
 
 
 def updateLabelList():
+    """
+    Organizes global variable list of people by adding both label and button lists
+    """
     global label_list, label_list_button, names
     label_list = []
     label_list_button = []
@@ -30,6 +32,17 @@ def updateLabelList():
 
 
 def HighlightLabel(name):
+    """
+    Highlight the user that is talking
+    :param name: String
+        Desired name to highlight. (None to un-highlight all of them)
+    """
+    if name == '':
+        return
+    if name == "None":
+        for label in label_list:
+            label.config(bg="#F0F0F0")
+        return
     index = names.index(name)
     for label in label_list:
         if label == label_list[index]:
@@ -39,15 +52,29 @@ def HighlightLabel(name):
 
 
 def captureUserInput(userfield, name_frame, frame2):
+    """
+    Capture user input and calls record_sentence_UI to finish setting up the user
+    :param userfield: Tkinter text box widget
+        Used to get input
+    :param name_frame: Tkinter Frame
+        Frame of the names to add respective name
+    :param frame2: Tkinter frame
+        Frame of the user input to give instructions on how to continue recording
+    """
     user_name = userfield.get()
     if user_name != "" and user_name not in names:
         names.append(user_name)
         updateLabelList()
         print_names(name_frame)
-        record_sentence_UI(user_name, frame2, user_name)
+        record_sentence_UI(frame2, user_name)
 
 
 def print_names(frame):
+    """
+    Update the Tkinter name frame to print all names with a delete option
+    :param frame: Tkinter frame
+        the name_frame frame so it can be updated
+    """
     name_title = Label(frame, text="Speaking", anchor=CENTER, font="Helvetica 20 bold underline")
     name_title.place(x=60, y=0)
     ypos = 50
@@ -60,6 +87,13 @@ def print_names(frame):
 
 
 def delete_user(name_item, frame):
+    """
+    Functionality of the delete user button. Deletes audio files, removes from name list, and updates UI
+    :param name_item: String
+        the name of the respective user to delete
+    :param frame: Tkinter frame
+        name_frame to update the tkinter frame.
+    """
     shutil.rmtree(f"words\\sentence\\{name_item}")
     for i in range(len(label_list)):
         label_list[i].destroy()
@@ -73,10 +107,18 @@ def delete_user(name_item, frame):
         label_list_button[i] = Button(frame, text="X", anchor=CENTER, font="Helvetica 10",command=lambda i=i: delete_user(names[i], frame))
         label_list_button[i].place(x=200, y=ypos)
         ypos += 30
-    # print_names(frame)
 
 
 def continue_function(instructions, button, user_input):
+    """
+    Button that has multiple uses to make recording new data easy! (OK button)
+    :param instructions: Tkinter label
+        instructions1 as it needs to update text as the button is pressed
+    :param button: Tkinter button
+        continue_button to update text as the button is pressed
+    :param user_input: String
+        name to distinguish profiles
+    """
     global iteration
     if iteration == 1:
         instructions.config(text="Record this Sentence:\nThat quick beige fox jumped in\nthe air over each thin dog. \nLook out, I shout, for he\'s foiled \nyou again, creating chaos")
@@ -93,7 +135,14 @@ def continue_function(instructions, button, user_input):
     iteration += 1
 
 
-def record_sentence_UI(name, frame, user_input):
+def record_sentence_UI(frame, user_input):
+    """
+    Helper function to record new data for new user
+    :param frame: Tkinter frame
+        frame2 as this frame needs to change
+    :param user_input: String
+        Users name to distinguish between users
+    """
     global iteration
     iteration = 1
 
@@ -103,27 +152,97 @@ def record_sentence_UI(name, frame, user_input):
     continue_button = Button(frame, text="Ok", command=lambda: continue_function(instructions1, continue_button, user_input))
     continue_button.place(x=110, y=80)
 
-    # print(f"you will have {10} seconds to read the following sentence \n")
-    # sleep(2)
-    # print('"That quick beige fox jumped in the air over each thin dog. Look out, I shout, for he\'s foiled you again, creating chaos"\n')
-    # sleep(1)
-    #
-    # create_recorded_data("sentence", 10)
-    #
-    # break_up_audio(["sentence"])
-    #
-    # export_recordings(name, ["sentence"])
+
+def acc_label():
+    """
+    Returns the label for the accuracy so it can dynamically update when the frame is reloaded
+    :return: String
+        this string will be the text of the accuracy label
+    """
+    try:
+        model
+    except:
+        return "Accuracy= N/A"
+    accuracy = model.accuracy[-1]
+    return f"Accuracy={round(accuracy, 3)}"
 
 
 def train_model_UI(acc_label):
+    """
+    Trains the model and places it in global variable model
+    :param acc_label: Tkinter Label
+        accuracy label to change the accuracy after updating the mode
+    """
     global model
     model = word_model(['sentence'])
     accuracy = model.accuracy[-1]
-    acc_label.config(text=f"Accuracy={round(accuracy,3)}")
+    acc_label.config(text=f"Accuracy={round(accuracy, 3)}")
+
+
+def popup_error(text, flag=False):
+    """
+    Creates popup screen to display a message
+    :param text: String
+        Message on the popup window
+    :param flag: Boolean
+        if True, the message is an error and is red. if false, normal messag
+    """
+    # Initialize popup
+    win = Toplevel()
+    win.wm_title("Error")
+    winx = 400
+    winy = 170
+    win.minsize(winx, winy)
+    win.maxsize(winx, winy)
+
+    # Title of the popup (if error or not)
+    if flag:
+        message = Label(win, text=text, font=('Ariel', 20), bg="red")
+        message.pack(side=TOP, pady=10)
+    else:
+        message = Label(win, text=text, font=('Ariel', 20))
+        message.pack(side=TOP, pady=10)
+
+    # Create canvas
+    canvas = Canvas(win, width=winx, height=winy)
+    canvas.pack(side=LEFT)
+
+    # Exit button to close the popup window
+    exitpop = Button(win, text="Okay", command=win.destroy, height=2, width=12)
+    exitpop.place(x=(winx / 2) - 55, y=winy - 60)
+
+
+def stop_rec(action):
+    """
+    Multifunctional function to either return live or change live's value
+    :param action: String
+        Either STOP or CHECK to either stop the recording or to check if it should be stopped
+    :return: Boolean
+        Only returns when action = CHECK
+    """
+    global live
+    if action == "STOP":
+        live = False
+    else:
+        return live
 
 
 class HomePage:
     def record_live_setup_UI(self, recordButton, frame):
+        """
+        Sets up liverecording by changing the button to stop and other functions that do not loop
+        :param recordButton: Tkinter button
+            To destroy and replace with a stop button
+        :param frame: Tkinter frame
+            Options frame to get access to build a stop button
+        """
+        global model, live
+        try:
+            model
+        except NameError:
+            popup_error("Model Not Trained", True)
+            return
+
         recordButton.destroy()
         dir_record_img = directory_to_project + "\\tools\\images\\stop-button.png"
         # Photo for Record Button
@@ -132,27 +251,44 @@ class HomePage:
         panelrecord = Label(frame, image=photoimagerecord)
         panelrecord.photo = photoimagerecord
 
+        live = True
         stopButton = Button(frame, image=photoimagerecord, relief="flat", border=1, bd=0, highlightthickness=0,
-                         command=lambda: print("hi"))
+                         command=lambda: stop_rec("STOP"))
         stopButton.place(x=208, y=5)
-
+        # if not live:
+        #     HighlightLabel("None")
+        #     return
         self.record_live_UI()
 
+
     def record_live_UI(self):
-        global model
-        # self.record_live_UI().after(1000)
+        """
+        Helper function that loops when recording starts and can be terminated by pressing the stop button
+        """
+        global model, window, live
+
+        live = stop_rec("CHECK")
+        if live:
+            window.after(5000, lambda: self.record_live_UI())
+        else:
+            ChangeScreen()
+            return
+
         # Change UI display. Delete microphone and add stop button
 
-        # Check stop button
-        print("hi")
         # record for 2 sec
         guess = short_prediction(model, 2)
+        print(guess)
         # process results
         # highlight name
         HighlightLabel(guess)
 
-
     def __init__(self, master):
+        """
+        The initialization of the HomePage.
+        :param master: Tkinter frame
+            is window after the program starts.
+        """
         # Control the Menu Bar
         frame1 = Frame(master, height=455, width=500)
         frame1.pack(side=LEFT, anchor=NW)
@@ -195,7 +331,7 @@ class HomePage:
         TrainModelButton = Button(optionsframe, text="Train Model", command=lambda: train_model_UI(model_accuracy_label), height=2, width=13, font="Helvetica 15 bold")
         TrainModelButton.place(x=315, y=5)
 
-        model_accuracy_label = Label(frame1, text=f"Accuracy= N/A", anchor=CENTER, font="Helvetica 16 bold", height=2)
+        model_accuracy_label = Label(frame1, text=acc_label(), anchor=CENTER, font="Helvetica 16 bold", height=2)
         model_accuracy_label.place(x=50, y=400)
 
         # Record new data
@@ -204,6 +340,9 @@ class HomePage:
 
 
 def start_UI():
+    """
+    Helper function to clean up main and set up the UI of tkinter
+    """
     global window, names, label_list, label_list_button
     names = os.listdir("words\\sentence")
     updateLabelList()
