@@ -277,8 +277,8 @@ class HomePage:
         # Change UI display. Delete microphone and add stop button
 
         # record for 2 sec
-        guess = short_prediction(model, 1)
-        print(guess)
+        guess, conf = short_prediction(model, 1)
+        print(f"{guess} {conf}")
         # process results
         # highlight name
         HighlightLabel(guess)

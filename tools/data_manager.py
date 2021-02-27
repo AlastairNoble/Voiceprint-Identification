@@ -216,12 +216,14 @@ def most_frequent(p, c):
     if len(p) == 0:
         return '', 0
 
-    d = {}
-
+    confs = {}
+    counts = {}
     for i in range(len(p)):
-        d[p[i]] = d.get(p[i], 0) + c[i]
-    speaker = max(d, key=d.get)
-    confidence = d[speaker]
+        confs[p[i]] = confs.get(p[i], 0) + c[i]
+        counts[p[i]] = counts.get(p[i], 0) + 1
+
+    speaker = max(confs, key=confs.get)
+    confidence = confs[speaker]/counts[speaker]
     return speaker, confidence
 
 
@@ -243,7 +245,7 @@ def short_prediction(model, s=2):
         try:
             pred, c = predict_speaker(chunk, model)
 
-            print(f"{pred}, {c}")
+            # print(f"{pred}, {c}")
             predictions.append(pred)
             confidence.append(c)
         except:
