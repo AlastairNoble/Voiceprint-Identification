@@ -45,14 +45,13 @@ def separate_words(sound_file_name):
     audio_chunks = split_on_silence(sound_file, min_silence_len=50, silence_thresh=(int(sound_file.dBFS) - 10))
 
     clear_audio("./splitAudio")
-    numWords = 0
     out_files = []
     for i, chunk in enumerate(audio_chunks):
-        out_file = f"./splitAudio//chunk{i}.wav"
-        out_files.append(out_file)
-        # print("Exporting", out_file) # Check to see exporting
-        chunk.export(out_file, format="wav")
-        numWords += 1
+        if chunk.dBFS > -70: # only write file if volume is above silence threshold
+            out_file = f"./splitAudio//chunk{i}.wav"
+            out_files.append(out_file)
+            # print("Exporting", out_file) # Check to see exporting
+            chunk.export(out_file, format="wav")
     # print(f"Exported {numWords} .wav files")
     # CONVERT AUDIO TO TEXT -------------
     # initialize the recognizer

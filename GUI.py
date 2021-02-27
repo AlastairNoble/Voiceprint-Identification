@@ -37,9 +37,9 @@ def HighlightLabel(name):
     :param name: String
         Desired name to highlight. (None to un-highlight all of them)
     """
-    if name == '':
-        return
-    if name == "None":
+    # if name == '':
+    #     return
+    if name == "None" or name == "":
         for label in label_list:
             label.config(bg="#F0F0F0")
         return
@@ -269,7 +269,7 @@ class HomePage:
 
         live = stop_rec("CHECK")
         if live:
-            window.after(3000, lambda: self.record_live_UI())
+            window.after(1100, lambda: self.record_live_UI())
         else:
             ChangeScreen()
             return
@@ -277,7 +277,7 @@ class HomePage:
         # Change UI display. Delete microphone and add stop button
 
         # record for 2 sec
-        guess = short_prediction(model, 2)
+        guess = short_prediction(model, 1)
         print(guess)
         # process results
         # highlight name

@@ -96,8 +96,8 @@ def predict_speaker(file_path, word_model):
         file path for the .wav file to predict the speaker of
     :param word_model:
         trained model to make the prediction from
-    :return: str
-        predicted speaker/label
+    :return: prediction: str, predicted speaker/label
+        m: float prediction confidence
     """
     labels = word_model.train_labels_encoded.tolist()  # list of the encoded labels from training
     features = word_model.ss.transform([extract_features(file_path)])
@@ -114,7 +114,7 @@ def predict_speaker(file_path, word_model):
         prediction = word_model.train_labels[prediction_ind]
     except:
         prediction = "could not identify speaker"
-    return prediction
+    return prediction, m
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -166,7 +166,7 @@ def get_mic_input():
     return WAVE_OUTPUT_FILENAME
 
 
-def get_meeting_input(secs = 5):
+def get_meeting_input(secs = 2):
 
     WAVE_OUTPUT_FILENAME = "test/test_out_from_in.wav"
     p = pyaudio.PyAudio()
@@ -206,14 +206,23 @@ def get_meeting_input(secs = 5):
     return WAVE_OUTPUT_FILENAME
 
 
-def most_frequent(List):
+def most_frequent(p, c):
     """
     :param List: list
     :returns most frequently occuring element in a list
     """
-    if len(List) > 0:
-        return max(set(List), key=List.count)
-    return ''
+    # if len(List) > 0:
+    #     return max(set(List), key=List.count)
+    if len(p) == 0:
+        return '', 0
+
+    d = {}
+
+    for i in range(len(p)):
+        d[p[i]] = d.get(p[i], 0) + c[i]
+    speaker = max(d, key=d.get)
+    confidence = d[speaker]
+    return speaker, confidence
 
 
 def short_prediction(model, s=2):
@@ -228,14 +237,18 @@ def short_prediction(model, s=2):
     one_second_input = get_meeting_input(s)
     chunks = separate_words(one_second_input)
 
+    predictions = []
+    confidence = []
     for chunk in chunks:
-        predictions = []
         try:
-            pred = predict_speaker(chunk, model)
+            pred, c = predict_speaker(chunk, model)
+
+            print(f"{pred}, {c}")
             predictions.append(pred)
+            confidence.append(c)
         except:
             pass
-    return most_frequent(predictions)
+    return most_frequent(predictions, confidence)
 
 
 def live_input(model):
