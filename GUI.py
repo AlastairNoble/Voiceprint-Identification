@@ -75,7 +75,7 @@ def print_names(frame):
     :param frame: Tkinter frame
         the name_frame frame so it can be updated
     """
-    name_title = Label(frame, text="Speaking", anchor=CENTER, font="Helvetica 20 bold underline")
+    name_title = Label(frame, text="Speaking", anchor=CENTER, font="Helvetica 20 bold ")
     name_title.place(x=60, y=0)
     ypos = 50
     for i in range(len(label_list)):
@@ -315,7 +315,7 @@ class HomePage:
 
         print_names(name_frame)
 
-        user_input_title = Label(frame2, text="Options", anchor=CENTER, font="Helvetica 20 bold underline")
+        user_input_title = Label(frame2, text="Options", anchor=CENTER, font="Helvetica 20 bold")
         user_input_title.place(x=65, y=0)
 
         # User Input field
