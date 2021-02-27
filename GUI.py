@@ -31,7 +31,7 @@ def updateLabelList():
         label_list_button.append(button_item)
 
 
-def HighlightLabel(name):
+def HighlightLabel(name, percent_chance_label, percent_chance):
     """
     Highlight the user that is talking
     :param name: String
@@ -49,6 +49,7 @@ def HighlightLabel(name):
             pass
         label.config(bg="#F0F0F0")
     label_list[index].config(bg="Yellow")
+    percent_chance_label.config(text="Confidence: "+(100*round(percent_chance, 3))+"%")
 
 
 def captureUserInput(userfield, name_frame, frame2):
@@ -228,7 +229,7 @@ def stop_rec(action):
 
 
 class HomePage:
-    def record_live_setup_UI(self, recordButton, frame):
+    def record_live_setup_UI(self, recordButton, frame, nameframe):
         """
         Sets up liverecording by changing the button to stop and other functions that do not loop
         :param recordButton: Tkinter button
@@ -255,13 +256,13 @@ class HomePage:
         stopButton = Button(frame, image=photoimagerecord, relief="flat", border=1, bd=0, highlightthickness=0,
                          command=lambda: stop_rec("STOP"))
         stopButton.place(x=208, y=5)
-        # if not live:
-        #     HighlightLabel("None")
-        #     return
-        self.record_live_UI()
 
+        percent_chance_label = Label(nameframe, text="", font="Helvetica 18")
+        percent_chance_label.place(x=30, y=350)
 
-    def record_live_UI(self):
+        self.record_live_UI(percent_chance_label)
+
+    def record_live_UI(self, percent_chance_label):
         """
         Helper function that loops when recording starts and can be terminated by pressing the stop button
         """
@@ -269,7 +270,7 @@ class HomePage:
 
         live = stop_rec("CHECK")
         if live:
-            window.after(1100, lambda: self.record_live_UI())
+            window.after(1100, lambda: self.record_live_UI(percent_chance_label))
         else:
             ChangeScreen()
             return
@@ -277,11 +278,11 @@ class HomePage:
         # Change UI display. Delete microphone and add stop button
 
         # record for 2 sec
-        guess = short_prediction(model, 1)
-        print(guess)
+        guess, confidence = short_prediction(model, 1)
+        print(guess + ", " + str(confidence))
         # process results
         # highlight name
-        HighlightLabel(guess)
+        HighlightLabel(guess, percent_chance_label, confidence)
 
     def __init__(self, master):
         """
@@ -307,7 +308,7 @@ class HomePage:
 
         # Functionality of Record Live button
         RecordButton = Button(optionsframe, image=photoimagerecord, relief="flat", border=1, bd=0, highlightthickness=0,
-                         command=lambda: self.record_live_setup_UI(RecordButton, optionsframe))
+                         command=lambda: self.record_live_setup_UI(RecordButton, optionsframe, name_frame))
         RecordButton.place(x=208, y=5)
 
         name_frame = Frame(master, height=400, width=250, borderwidth="4", relief="groove")
