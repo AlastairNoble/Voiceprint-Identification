@@ -71,7 +71,7 @@ class word_model:
 
         history = self.model.fit(train_features, self.train_labels_encoded, epochs=20, validation_data=(val_features, val_labels))
 
-        self.accuracy = history.history['accuracy']
+        self.accuracy = history.history['val_accuracy']
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))

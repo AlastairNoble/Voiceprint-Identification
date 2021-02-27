@@ -269,7 +269,7 @@ class HomePage:
 
         live = stop_rec("CHECK")
         if live:
-            window.after(5000, lambda: self.record_live_UI())
+            window.after(3000, lambda: self.record_live_UI())
         else:
             ChangeScreen()
             return
