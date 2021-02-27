@@ -49,7 +49,7 @@ def HighlightLabel(name, percent_chance_label, percent_chance):
             pass
         label.config(bg="#F0F0F0")
     label_list[index].config(bg="Yellow")
-    percent_chance_label.config(text="Confidence: "+(100*round(percent_chance, 3))+"%")
+    percent_chance_label.config(text=f"Confidence: {100 * round(percent_chance, 3)}%")
 
 
 def captureUserInput(userfield, name_frame, frame2):
@@ -279,7 +279,7 @@ class HomePage:
 
         # record for 2 sec
         guess, confidence = short_prediction(model, 1)
-        print(guess + ", " + str(confidence))
+        print(f"{guess} {confidence}")
         # process results
         # highlight name
         HighlightLabel(guess, percent_chance_label, confidence)
