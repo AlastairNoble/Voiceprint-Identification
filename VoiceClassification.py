@@ -67,9 +67,9 @@ class word_model:
         self.train_labels_encoded = get_encoded_labels(train['speaker'])
         val_labels = get_encoded_labels(val['speaker'])
 
-        self.model = create_model(3 * N_MFCCS, len(self.train_labels_encoded[0]))
+        self.model = create_model( N_MFCCS, len(self.train_labels_encoded[0]))
 
-        history = self.model.fit(train_features, self.train_labels_encoded, epochs=20, validation_data=(val_features, val_labels))
+        history = self.model.fit(train_features, self.train_labels_encoded, epochs=100, validation_data=(val_features, val_labels))
 
         self.accuracy = history.history['val_accuracy']
 

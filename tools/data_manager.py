@@ -13,7 +13,7 @@ from keras.utils.np_utils import to_categorical
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from tools.wordSeparation import *
-N_MFCCS = 12  # number of MFCCs to use in feature extraction
+N_MFCCS = 24  # number of MFCCs to use in feature extraction
 
 def get_data_from_dir(dir):
     """
@@ -51,14 +51,14 @@ def extract_features(filename, n_mfccs=N_MFCCS):
 
     mfccs = librosa.feature.mfcc(y=X, sr=sample_rate, n_mfcc=n_mfccs)
     mfccs_mean = np.mean(mfccs.T, axis=0)
+    #
+    # delta = librosa.feature.delta(mfccs)
+    # delta_mean = np.mean(delta.T, axis=0)
+    #
+    # deltadelta = librosa.feature.delta(mfccs, order=2)
+    # deltadelta_mean = np.mean(deltadelta.T, axis=0)
 
-    delta = librosa.feature.delta(mfccs)
-    delta_mean = np.mean(delta.T, axis=0)
-
-    deltadelta = librosa.feature.delta(mfccs, order=2)
-    deltadelta_mean = np.mean(deltadelta.T, axis=0)
-
-    return mfccs_mean.tolist() + delta_mean.tolist() + deltadelta_mean.tolist()
+    return mfccs_mean.tolist()#  + delta_mean.tolist() + deltadelta_mean.tolist()
 
 
 def get_features(filepaths, ss):

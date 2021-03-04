@@ -1,4 +1,5 @@
 from tkinter import *
+import math
 from VoiceClassification import *
 pi = np.pi
 directory_to_project = dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -49,7 +50,7 @@ def HighlightLabel(name, percent_chance_label, percent_chance):
             pass
         label.config(bg="#F0F0F0")
     label_list[index].config(bg="Yellow")
-    percent_chance_label.config(text=f"Confidence: {100 * round(percent_chance, 3)}%")
+    percent_chance_label.config(text=f"Confidence: {math.floor(100 * percent_chance)}%")
 
 
 def captureUserInput(userfield, name_frame, frame2):
@@ -120,12 +121,13 @@ def continue_function(instructions, button, user_input):
     :param user_input: String
         name to distinguish profiles
     """
+    RECORD_SECONDS = 34
     global iteration
     if iteration == 1:
-        instructions.config(text="Record this Sentence:\nThat quick beige fox jumped in\nthe air over each thin dog. \nLook out, I shout, for he\'s foiled \nyou again, creating chaos")
+        instructions.config(text="Record Prompt")
         button.config(text="Start Recording")
     elif iteration == 2:
-        create_recorded_data("sentence", 10)
+        create_recorded_data("sentence", RECORD_SECONDS)
         instructions.config(text="Stopped Recording")
         button.config(text="Ok")
         break_up_audio(["sentence"])
@@ -258,7 +260,7 @@ class HomePage:
         stopButton.place(x=208, y=5)
 
         percent_chance_label = Label(nameframe, text="", font="Helvetica 18")
-        percent_chance_label.place(x=30, y=350)
+        percent_chance_label.place(x=15, y=350)
 
         self.record_live_UI(percent_chance_label)
 
@@ -270,7 +272,7 @@ class HomePage:
 
         live = stop_rec("CHECK")
         if live:
-            window.after(1100, lambda: self.record_live_UI(percent_chance_label))
+            window.after(2000, lambda: self.record_live_UI(percent_chance_label))
         else:
             ChangeScreen()
             return
@@ -278,7 +280,7 @@ class HomePage:
         # Change UI display. Delete microphone and add stop button
 
         # record for 2 sec
-        guess, confidence = short_prediction(model, 1)
+        guess, confidence = short_prediction(model, 1.5)
         print(f"{guess} {confidence}")
         # process results
         # highlight name
