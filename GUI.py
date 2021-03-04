@@ -1,6 +1,7 @@
 from tkinter import *
 import math
 from VoiceClassification import *
+import keras
 pi = np.pi
 directory_to_project = dir_path = os.path.dirname(os.path.realpath(__file__))
 model_val_accuracy = 0.555
@@ -236,14 +237,15 @@ def saveModel():
     except NameError:
         popup_error("Model Not Trained", True)
         return
-    dir_model = directory_to_project + "tools\\model"
-    model.save(dir_model)
+    dir_model = "tools\\model\\saved_model"
+    model.model.save(dir_model)
     return
 
 def loadModel():
     try:
-        dir_model = directory_to_project + "tools\\model"
-        # model = keras.models.load_model(dir_model)
+        dir_model = "tools\\model\\saved_model"
+        global model
+        model = keras.models.load_model(dir_model)
     except:
         popup_error("No Saved Model", True)
 
