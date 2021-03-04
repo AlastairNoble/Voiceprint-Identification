@@ -230,6 +230,25 @@ def stop_rec(action):
         return live
 
 
+def saveModel():
+    try:
+        model
+    except NameError:
+        popup_error("Model Not Trained", True)
+        return
+    dir_model = directory_to_project + "tools\\model"
+    model.save(dir_model)
+    return
+
+def loadModel():
+    try:
+        dir_model = directory_to_project + "tools\\model"
+        # model = keras.models.load_model(dir_model)
+    except:
+        popup_error("No Saved Model", True)
+
+
+
 class HomePage:
     def record_live_setup_UI(self, recordButton, frame, nameframe):
         """
@@ -333,6 +352,12 @@ class HomePage:
         # Train Model
         TrainModelButton = Button(optionsframe, text="Train Model", command=lambda: train_model_UI(model_accuracy_label), height=2, width=13, font="Helvetica 15 bold")
         TrainModelButton.place(x=315, y=5)
+
+        saveModelButton = Button(optionsframe, text="Save Model", command=lambda: saveModel(), height=0, width=0, font="Helvetica 14 bold")
+        saveModelButton.place(x=50, y=5)
+
+        loadModelButton = Button(optionsframe, text="Load Model", command=lambda: loadModel(), height=0, width=0, font="Helvetica 14 bold")
+        loadModelButton.place(x=50, y=50)
 
         model_accuracy_label = Label(frame1, text=acc_label(), anchor=CENTER, font="Helvetica 16 bold", height=2)
         model_accuracy_label.place(x=50, y=400)
