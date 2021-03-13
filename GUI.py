@@ -241,14 +241,15 @@ def saveModel():
     model.model.save(dir_model)
     return
 
-def loadModel():
+def loadModel(acc_label):
     try:
         dir_model = "tools\\model\\saved_model"
         global model
-        model = keras.models.load_model(dir_model)
+        model = word_model(['sentence'], load=True, path=dir_model)
     except:
         popup_error("No Saved Model", True)
-
+    accuracy = model.accuracy[-1]
+    acc_label.config(text=f"Accuracy={round(accuracy, 3)}")
 
 
 class HomePage:
@@ -358,7 +359,7 @@ class HomePage:
         saveModelButton = Button(optionsframe, text="Save Model", command=lambda: saveModel(), height=0, width=0, font="Helvetica 14 bold")
         saveModelButton.place(x=50, y=5)
 
-        loadModelButton = Button(optionsframe, text="Load Model", command=lambda: loadModel(), height=0, width=0, font="Helvetica 14 bold")
+        loadModelButton = Button(optionsframe, text="Load Model", command=lambda: loadModel(model_accuracy_label), height=0, width=0, font="Helvetica 14 bold")
         loadModelButton.place(x=50, y=50)
 
         model_accuracy_label = Label(frame1, text=acc_label(), anchor=CENTER, font="Helvetica 16 bold", height=2)
