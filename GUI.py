@@ -231,7 +231,22 @@ def stop_rec(action):
         return live
 
 
-def saveModel():
+def save_acc():
+    f = open("tools\\model\\saved_model\\m_accuracy.txt", "w")
+    accuracy = model.accuracy[-1]
+    acc_str = str(round(accuracy, 3))
+    f.write(acc_str)
+    f.close()
+
+
+def load_acc(acc_label):
+    f = open("tools\\model\\saved_model\\m_accuracy.txt", "r")
+    accuracy = f.read()
+    acc_label.config(text=f"Accuracy={accuracy}")
+    f.close()
+
+
+def save_model():
     try:
         model
     except NameError:
@@ -239,17 +254,18 @@ def saveModel():
         return
     dir_model = "tools\\model\\saved_model"
     model.model.save(dir_model)
-    return
+    save_acc()
+
 
 def loadModel(acc_label):
     try:
         dir_model = "tools\\model\\saved_model"
         global model
         model = word_model(['sentence'], load=True, path=dir_model)
+        load_acc(acc_label)
     except:
         popup_error("No Saved Model", True)
-    accuracy = model.accuracy[-1]
-    acc_label.config(text=f"Accuracy={round(accuracy, 3)}")
+
 
 
 class HomePage:
@@ -356,7 +372,7 @@ class HomePage:
         TrainModelButton = Button(optionsframe, text="Train Model", command=lambda: train_model_UI(model_accuracy_label), height=2, width=13, font="Helvetica 15 bold")
         TrainModelButton.place(x=315, y=5)
 
-        saveModelButton = Button(optionsframe, text="Save Model", command=lambda: saveModel(), height=0, width=0, font="Helvetica 14 bold")
+        saveModelButton = Button(optionsframe, text="Save Model", command=lambda: save_model(), height=0, width=0, font="Helvetica 14 bold")
         saveModelButton.place(x=50, y=5)
 
         loadModelButton = Button(optionsframe, text="Load Model", command=lambda: loadModel(model_accuracy_label), height=0, width=0, font="Helvetica 14 bold")
