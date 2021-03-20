@@ -4,7 +4,6 @@ Voiceprint Identification for QMIND
 
 ### GUI
 The GUI is Tkinter-based for real time classification. 
-![image](https://user-images.githubusercontent.com/65412039/111880975-be84e180-8984-11eb-8b48-c8d314fd8c11.png)
 
 <img src="https://user-images.githubusercontent.com/65412039/111880975-be84e180-8984-11eb-8b48-c8d314fd8c11.png" width="340">
 
