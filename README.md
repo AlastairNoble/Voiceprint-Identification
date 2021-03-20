@@ -4,7 +4,10 @@ Voiceprint Identification for QMIND
 ## Usage
 
 ### GUI
-Use the Voiceprint ID GUI for real time classification using computer audio
+The GUI is Tkinter-based for real time classification. 
+![image](https://user-images.githubusercontent.com/65412039/111880975-be84e180-8984-11eb-8b48-c8d314fd8c11.png)
+#### Add a User Profile
+Add a user profile by simply typing the user name and pressing the *Add User* button. The GUI will then guide you through the process of adding a user by prompting you to say a couple sentences and recording your data. Thats it! 
 
 step 1.
 
