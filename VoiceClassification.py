@@ -53,6 +53,7 @@ class word_model:
         """
 
         data = pd.DataFrame()
+
         for word in words:
             word_data = get_data_from_dir('words/{}/'.format(word))
             data = data.append(word_data)
@@ -74,6 +75,7 @@ class word_model:
         else:
             self.model = create_model( N_MFCCS, len(self.train_labels_encoded[0]))
             history = self.model.fit(train_features, self.train_labels_encoded, epochs=50, validation_data=(val_features, val_labels))
+
             self.accuracy = history.history['val_accuracy']
 
 
@@ -87,7 +89,7 @@ if __name__ == "__main__":
     #
     model = word_model(['sentence'])
     #
-    # print(predict_speaker("test/eli.wav", model))
+    print(predict_speaker("test/eli.wav", model))
     # print(predict_speaker("test/harley.wav", model))
     # print(predict_speaker("test/alex.wav", model))
 

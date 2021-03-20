@@ -100,6 +100,7 @@ def predict_speaker(file_path, word_model):
         m: float prediction confidence
     """
     labels = word_model.train_labels_encoded.tolist()  # list of the encoded labels from training
+
     features = word_model.ss.transform([extract_features(file_path)])
 
     to_predict = np.array(features)  # list of data for the model to predict, just one item for now
@@ -108,7 +109,6 @@ def predict_speaker(file_path, word_model):
     pred = predictions[0].tolist()  # take the first element which is the prediciton for the first element in to_predict, remember this is still one hot encoded so it is a big array of 0s and 1s
     m = max(pred)
     p = [1 if i == m else 0 for i in pred]  # convert highest propability to 1 and all else to 0
-
     try:
         prediction_ind = labels.index(p)  # index of predicted label (encoded)
         prediction = word_model.train_labels[prediction_ind]
@@ -170,10 +170,12 @@ def get_meeting_input(secs = 2):
 
     WAVE_OUTPUT_FILENAME = "test/test_out_from_in.wav"
     p = pyaudio.PyAudio()
-
     for i in range(p.get_device_count()):
         dev = p.get_device_info_by_index(i)
-        if (dev['name'] == 'Stereo Mix (Realtek(R) Audio)' and dev['hostApi'] == 0):
+
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # select the name of the audio input you want to use! see readme for details
+        if (dev['name'] == 'Microphone (Realtek(R) Audio)' and dev['hostApi'] == 0):
             dev_index = dev['index']
 
     stream = p.open(format=FORMAT,
