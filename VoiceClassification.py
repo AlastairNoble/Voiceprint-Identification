@@ -68,7 +68,7 @@ class word_model:
         self.train_labels_encoded = get_encoded_labels(train['speaker'])
         val_labels = get_encoded_labels(val['speaker'])
 
-        if (load):
+        if load:
             self.model = keras.models.load_model(path)
             self.accuracy = self.model.evaluate(val_features, val_labels)
         else:
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     # print(predict_speaker("test/harley.wav", model))
     # print(predict_speaker("test/alex.wav", model))
 
-    live_input(model)
+    # live_input(model)
 
     # separate_words(f"{dir_path}\\test\\Sentence.wav")
 
