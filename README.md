@@ -28,6 +28,7 @@ Epoch 1/50
 .  
 Epoch 50/50
 5/5 [==============================] - 0s 33ms/step - loss: 0.0259 - accuracy: 0.9937 - val_loss: 0.0223 - val_accuracy: 0.9811  
+  
 and make predictions by calling *predict_speaker*
 ```python
 name, confidence = predict_speaker("test/eli.wav", model)
