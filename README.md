@@ -1,5 +1,5 @@
 # Voiceprint-Identification
-A general overview of the Voiceprint Identification project is attached **<a href="VoicePrintIdentificationPaper.pdf" class="image fit"><img src="images/marr_pic.jpg" alt="here"></a>**. This paper outlines a bried introduction to the project, the teams methodology, results and discussion, and conculsions/future work. For information regarding how to use the application, view the *How To Use* section. A more in-depth description about how the model works is also in the *How It Works* setion below.
+A general overview of the Voiceprint Identification project is attached **<a href="VoicePrintIdentificationPaper.pdf" class="image fit">Here</a>**. This paper outlines a bried introduction to the project, the teams methodology, results and discussion, and conculsions/future work. For information regarding how to use the application, view the *How To Use* section. A more in-depth description about how the model works is also in the *How It Works* setion below.
 
 ## How To Use
 ### GUI
@@ -22,8 +22,12 @@ In this image, the model is 80% sure that Alex is speaking on a model that has t
 Once you are all done speaking for the day, done forget to save your model before you exit to avoid retraining your data. Do this by pressing *Save Model* once a model has been trained. After 
 
 ## How It Works
+### Data Collection
+Data can be compiled manually or using the GUI. If data is compiled manually, the following file structure must be used:  words/'word'/'name'/'file'.wav (ex words/the/john/1.wav). For an example, see the words/alexa folder. This folder contains a dataset from kaggle. The model performs well with short audio files, so break your audio data into word length files (use the function break_up_audio if you like). 
+See the section "Add User Profile" above for how to use the GUI to add data. The GUI adds data to folder words/sentence. Note that the name of the file does not matter, and the name of the 'word' does not matter.
+
 ### Model
-The word model trains a keras sequential on files in the 'words' folder. To train a model on audio data, use file structure words/'word'/'name'/'file'.wav (ex words/the/john/1.wav) and call word model as follows
+The word model trains a keras sequential on files in the 'words' folder. To train a model on audio data, use file structure words/'word'/'name'/'file'.wav (ex words/the/john/1.wav) and call word model as with parameter words (list of words to train on). The specific word does not matter the model trains on all the words together.
 ```python
 words = ["alexa","the", "be", "to", "of", "and"]
 model = word_model(words)
