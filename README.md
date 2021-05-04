@@ -1,5 +1,5 @@
 # Voiceprint-Identification
-INTRO ***************
+A general overview of the Voiceprint Identification project is attached HERE. This paper outlines a bried introduction to the project, the teams methodology, results and discussion, and conculsions/future work. For information regarding how to use the application, view the *How To Use* section. A more in-depth description about how the model works is also in the *How It Works* setion below.
 
 ## How To Use
 ### GUI
@@ -8,7 +8,7 @@ The GUI is Tkinter-based for real time classification.
 <img src="https://user-images.githubusercontent.com/65412039/111880975-be84e180-8984-11eb-8b48-c8d314fd8c11.png" width="340">
 
 #### Add a User Profile
-Add a user profile by simply typing the user name and pressing the *Add User* button. The GUI will then guide you through the process of adding a user by prompting you to say a couple sentences and recording your data. Thats it! 
+Add a user profile by simply typing the user name and pressing the *Add User* button. The GUI will then guide you through the process of adding a user by prompting you to say a couple sentences and recording your data. If the recording time is too long or short, feel free to change the *RECORD_SECONDS* variable in the *GUI.py* file on line 125.
 Add a user profile by simply typing the user name and pressing the *Add User* button. The GUI will then guide you through the process of adding a user by prompting you to say a couple sentences and recording your data. Thats it! Now, once you train the model again to train with your data, the model can guess you. To train the model, just simply press the *Train Model* Button and wait until the model fully trains. Once the model has trained, the validation accuracy of the model will be updated on the UI and you wil be ready to record live!
 
 #### Guess Who is Speaking Live
@@ -47,8 +47,11 @@ this outputs the name and confidence
 
 ### Data Collection
 ### Libraries
-
-
-## Possible Improvements
-
-## Future Applications
+Model | GUI | Misc
+| :---: | :---: | :---:
+Keras | TKinter | Wave
+Librosa | PyAudio | OS
+Speech Recognition  | PyDub | Time
+SkLearn  |  | Shutil
+Pandas  |  | Math
+Tensorflow  |  | 
