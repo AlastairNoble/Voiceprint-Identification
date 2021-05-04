@@ -1,7 +1,7 @@
 # Voiceprint-Identification
 A general overview of the Voiceprint Identification project is attached HERE. This paper outlines a bried introduction to the project, the teams methodology, results and discussion, and conculsions/future work. For information regarding how to use the application, view the *How To Use* section. A more in-depth description about how the model works is also in the *How It Works* setion below.
 
-<a href="VoicePrintIdentificationPaper.pdf" class="image fit"><img src="images/marr_pic.jpg" alt=""></a>
+<a href="VoicePrintIdentificationPaper.pdf" class="image fit"><img src="images/marr_pic.jpg" alt="test"></a>
 
 ## How To Use
 ### GUI
