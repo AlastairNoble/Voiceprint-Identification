@@ -49,7 +49,6 @@ name, confidence = predict_speaker("test/eli.wav", model)
 ```
 this outputs the name and confidence
 
-### Data Collection
 ### Libraries
 Model | GUI | Misc
 | :---: | :---: | :---:
