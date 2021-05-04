@@ -1,7 +1,7 @@
 # Voiceprint-Identification
-Voiceprint Identification for QMIND
-## Usage
+INTRO ***************
 
+## How To Use
 ### GUI
 The GUI is Tkinter-based for real time classification. 
 
@@ -18,12 +18,11 @@ After adding all of the neccecary user profiles and pressed the train model butt
 
 In this image, the model is 80% sure that Alex is speaking on a model that has the validation accuracy of 96.2%
 
-step 1.
 #### Save/Load Model
 Once you are all done speaking for the day, done forget to save your model before you exit to avoid retraining your data. Do this by pressing *Save Model* once a model has been trained. After 
 
+## How It Works
 ### Model
-
 The word model trains a keras sequential on files in the 'words' folder. To train a model on audio data, use file structure words/'word'/'name'/'file'.wav (ex words/the/john/1.wav) and call word model as follows
 ```python
 words = ["alexa","the", "be", "to", "of", "and"]
@@ -45,3 +44,11 @@ name, confidence = predict_speaker("test/eli.wav", model)
 # 'eli', .9099897
 ```
 this outputs the name and confidence
+
+### Data Collection
+### Libraries
+
+
+## Possible Improvements
+
+## Future Applications
